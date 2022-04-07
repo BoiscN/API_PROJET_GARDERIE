@@ -50,7 +50,7 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
         /// Méthode de service permettant d'obtenir la liste des CategorieDepenses.
         /// </summary>
         /// <returns>Liste contenant les département.</returns>
-        public List<CategorieDepenseDTO> ObtenirListeCommerce()
+        public List<CategorieDepenseDTO> ObtenirListeCategorieDepense()
         {
             List<CategorieDepenseDTO> listeCategorieDepenseDTO = CategorieDepenseRepository.Instance.ObtenirListeCategorieDepense();
             List<CategorieDepenseModel> listeCategorieDepense = new List<CategorieDepenseModel>();
