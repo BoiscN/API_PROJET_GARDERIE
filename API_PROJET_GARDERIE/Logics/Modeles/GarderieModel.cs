@@ -1,4 +1,5 @@
-﻿using System;
+﻿using API_PROJET_GARDERIE.Logics.DAOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,7 +30,7 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
                         nom = value;
                     else
                         throw new Exception("Le nom de la garderie doit avoir un maximum de 100 caractères.");
-                }
+            }
         }
 
         /// <summary>
@@ -108,6 +109,11 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
             }
         }
 
+        /// <summary>
+        /// Attribut représentant la liste des dépense d'une Garderie.
+        /// </summary>
+        public List<DepenseModel> listeDepense;
+
         #endregion AttributsProprietes
 
         #region Constructeurs
@@ -127,11 +133,62 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
             Ville = uneVille;
             Province = uneProvince;
             Telephone = unTelephone;
+            listeDepense = new List<DepenseModel>();
         }
 
         #endregion Constructeurs
 
         #region MethodesService
+
+        /// <summary>
+        /// Méthode de service permettant d'obtenir la liste des dépenses de la garderie.
+        /// </summary>
+        /// <returns>Une liste de dépenses</returns>
+        public List<DepenseModel> ObtenirListeDepense()
+        {
+            return listeDepense;
+        }
+
+        /// <summary>
+        /// Méthode de service permettant d'ajouter une dépense à la liste.
+        /// </summary>
+        /// <param name="uneDepense">La dépense à ajouter.</param>
+        public void AjouterDepense(DepenseModel uneDepense)
+        {
+            if (SiDepensePresent(uneDepense))
+                throw new Exception("Erreur - La dépense est déjà présente.");
+            listeDepense.Add(uneDepense);
+            if (!SiDepensePresent(uneDepense))
+                throw new Exception("Erreur - Problème lors de l'ajout d'une dépense.");
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de vérifier si une dépense est présente dans la liste.
+        /// </summary>
+        /// <param name="uneDepense">La dépense que l'on cherche. (Information du Equals)</param>
+        /// <returns>Vrai si la dépense est trouvé, Faux sinon...</returns>
+        private bool SiDepensePresent(DepenseModel uneDepense)
+        {
+            return listeDepense.Contains(uneDepense);
+        }
+
+        /// <summary>
+        /// Méthode de service permettant d'obtenir le nombre de dépense de la Garderie.
+        /// </summary>
+        /// <returns>Nombre de dépense.</returns>
+        private int ObtenirNombreDepense()
+        {
+            return listeDepense.Count;
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de savoir si la Garderie a aucune dépense.
+        /// </summary>
+        /// <returns>Vrai si aucune dépense, Faux sinon...</returns>
+        private bool SiAucuneDepense()
+        {
+            return ObtenirNombreDepense() == 0;
+        }
 
         #endregion MethodesService
 

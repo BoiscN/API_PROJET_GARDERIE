@@ -12,7 +12,7 @@ using API_PROJET_GARDERIE.Logics.Exceptions;
 namespace API_PROJET_GARDERIE.Logics.DAOs
 {
     /// <summary>
-    /// Classe représentant le répository d'un cégep.
+    /// Classe représentant le répository d'une Garderie.
     /// </summary>
     public class GarderieRepository : Repository
     {

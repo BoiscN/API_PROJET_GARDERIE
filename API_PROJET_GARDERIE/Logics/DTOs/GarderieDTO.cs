@@ -36,7 +36,17 @@ namespace API_PROJET_GARDERIE.Logics.DTOs
 
         #region Constructeurs
 
-        public GarderieDTO(){}
+        /// <summary>
+        /// Constructeur par défaut.
+        /// </summary>
+        public GarderieDTO()
+        {
+            Nom = "";
+            Adresse = "";
+            Ville = "";
+            Province = "";
+            Telephone = "";
+        }
 
         /// <summary>
         /// Constructeur avec paramètres.
@@ -56,7 +66,7 @@ namespace API_PROJET_GARDERIE.Logics.DTOs
         }
 
         /// <summary>
-        /// Constructeur avec le modèle Garderie en paramètre.
+        /// Constructeur avec le modèle GarderieModel en paramètre.
         /// </summary>
         /// <param name="laGarderie">L'objet du modèle Garderie.</param>
         public GarderieDTO(GarderieModel laGarderie)
