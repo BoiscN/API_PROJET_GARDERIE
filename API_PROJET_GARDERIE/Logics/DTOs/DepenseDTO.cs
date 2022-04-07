@@ -48,12 +48,12 @@ namespace API_PROJET_GARDERIE.Logics.DTOs
         /// </summary>
         /// <param name="dateTemps">La date de la dépense.</param>
         /// <param name="montant">Le montant de la dépense.</param>
-        public DepenseDTO(string dateTemps="", double montant=0)
+        public DepenseDTO(string dateTemps="", double montant=0, string descriptionCategorieDepense = "", double pourcentageCategorieDepense = 0, string descriptionCommerce = "", string adresseCommerce = "", string telephoneCommerce = "")
         {
             DateTemps = dateTemps;
             Montant = montant;
-            categorieDepenseDTO = new CategorieDepenseDTO();
-            commerceDTO = new CommerceDTO();
+            categorieDepenseDTO = new CategorieDepenseDTO(descriptionCategorieDepense, pourcentageCategorieDepense);
+            commerceDTO = new CommerceDTO(descriptionCommerce, adresseCommerce, telephoneCommerce);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@ using System.Data;
 using System.Collections.Generic;
 using API_PROJET_GARDERIE.Logics.DTOs;
 using API_PROJET_GARDERIE.Logics.Exceptions;
-
+using API_PROJET_GARDERIE.Logics.Modeles;
 
 /// <summary>
 /// Namespace pour les classe de type DAO.
@@ -62,7 +62,9 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         public List<DepenseDTO> ObtenirListeDepense(string nomGarderie)
         {
             SqlCommand command = new SqlCommand(" SELECT * " +
-                                                "   FROM T_Depenses " +
+                                                "   FROM T_Depenses td " +
+                                                " INNER JOIN T_CategoriesDepense tcd ON td.IdCategorieDepense = tcd.IdCategorieDepense " +
+                                                " INNER JOIN T_Commerces tc ON td.IdCommerce = tc.IdCommerce" +
                                                 "  WHERE IdGarderie = @idGarderie", connexion);
 
             SqlParameter idGarderieParam = new SqlParameter("@idGarderie", SqlDbType.Int);
@@ -79,7 +81,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    DepenseDTO depense = new DepenseDTO((reader.GetDateTime(1)).ToString(), (double) reader.GetDecimal(2));
+                    DepenseDTO depense = new DepenseDTO((reader.GetDateTime(1)).ToString(), (double) reader.GetDecimal(2), reader.GetString(7), (double) reader.GetDecimal(8), reader.GetString(10), reader.GetString(11), reader.GetString(12));
                     liste.Add(depense);
                 }
                 reader.Close();
