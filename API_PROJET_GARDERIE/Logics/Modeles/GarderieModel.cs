@@ -112,7 +112,7 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
         /// <summary>
         /// Attribut représentant la liste des dépense d'une Garderie.
         /// </summary>
-        public List<DepenseModel> listeDepense;
+        public List<DepenseModel> listeDepense { get; set; }
 
         #endregion AttributsProprietes
 

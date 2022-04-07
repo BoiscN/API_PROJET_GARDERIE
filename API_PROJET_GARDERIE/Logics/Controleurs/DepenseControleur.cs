@@ -62,7 +62,14 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
             List<DepenseModel> listeDepense = new List<DepenseModel>();
             foreach (DepenseDTO depense in listeDepenseDTO)
             {
-                listeDepense.Add(new DepenseModel(depense.DateTemps, depense.Montant));
+                listeDepense.Add(new DepenseModel(depense.DateTemps, depense.Montant, depense.categorieDepenseDTO.Description, depense.categorieDepenseDTO.Pourcentage, depense.commerceDTO.Description, depense.commerceDTO.Adresse, depense.commerceDTO.Telephone));
+            }
+
+            listeDepenseDTO.Clear();
+
+            foreach (DepenseModel depense in listeDepense)
+            {
+                listeDepenseDTO.Add(new DepenseDTO(depense));
             }
 
             if (listeDepense.Count == listeDepenseDTO.Count)

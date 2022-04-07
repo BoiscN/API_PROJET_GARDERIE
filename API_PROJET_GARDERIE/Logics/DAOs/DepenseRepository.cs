@@ -79,7 +79,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    DepenseDTO depense = new DepenseDTO(reader.GetString(1), reader.GetDouble(2), reader.GetDouble(3));
+                    DepenseDTO depense = new DepenseDTO((reader.GetDateTime(1)).ToString(), (double) reader.GetDecimal(2));
                     liste.Add(depense);
                 }
                 reader.Close();
@@ -167,7 +167,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 OuvrirConnexion();
                 SqlDataReader reader = command.ExecuteReader();
                 reader.Read();
-                uneDepense = new DepenseDTO(reader.GetString(1), reader.GetDouble(2), reader.GetDouble(3));
+                uneDepense = new DepenseDTO(reader.GetString(1), reader.GetDouble(2));
                 reader.Close();
                 return uneDepense;
             }

@@ -52,12 +52,12 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
         /// </summary>
         /// <param name="uneDateTemps">La date de la dépense</param>
         /// <param name="unMontant">Le montant de la dépense</param>
-        public DepenseModel(string uneDateTemps="", double unMontant=0)
+        public DepenseModel(string uneDateTemps="", double unMontant=0, string descriptionCategorieDepense="", double pourcentageCategorieDepense=0, string descriptionCommerce="", string adresseCommerce="", string telephoneCommerce="")
         {
             DateTemps = uneDateTemps;
             Montant = unMontant;
-            categorieDepenseModel = new CategorieDepenseModel();
-            commerceModel = new CommerceModel();
+            categorieDepenseModel = new CategorieDepenseModel(descriptionCategorieDepense, pourcentageCategorieDepense);
+            commerceModel = new CommerceModel(descriptionCommerce, adresseCommerce, telephoneCommerce);
         }
 
         #endregion Constructeurs
