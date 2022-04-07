@@ -12,6 +12,7 @@ namespace API_PROJET_GARDERIE.Controllers
         /// Methode qui permet d'obtenir la liste des garderies
         /// </summary>
         /// <returns>La liste des garderies dans la base de données</returns>
+        
         [Route("Garderie/ObtenirListeGarderie")]
         [HttpGet]
         public List<GarderieDTO> ObtenirListeGarderie()
