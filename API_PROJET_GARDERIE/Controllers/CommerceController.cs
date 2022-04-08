@@ -12,7 +12,7 @@ namespace API_PROJET_GARDERIE.Controllers
         /// Methode qui permet d'obtenir la liste des commerces de dépenses d'une garderie
         /// </summary>
         /// <returns>La liste des commerces de dépenses d'une garderie dans la base de données</returns>
-        [Route("Garderie/ObtenirListeCommerce")]
+        [Route("Commerce/ObtenirListeCommerce")]
         [HttpGet]
         public List<CommerceDTO> ObtenirListeCommerce()
         {

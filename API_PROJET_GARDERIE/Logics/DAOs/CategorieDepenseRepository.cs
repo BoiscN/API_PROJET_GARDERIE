@@ -71,7 +71,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    CategorieDepenseDTO categorieDepense = new CategorieDepenseDTO(reader.GetString(1), reader.GetDouble(2));
+                    CategorieDepenseDTO categorieDepense = new CategorieDepenseDTO(reader.GetString(1), (double) reader.GetDecimal(2));
                     liste.Add(categorieDepense);
                 }
                 reader.Close();

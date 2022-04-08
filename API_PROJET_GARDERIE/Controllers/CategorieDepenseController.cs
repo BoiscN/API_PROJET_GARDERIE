@@ -12,7 +12,7 @@ namespace API_PROJET_GARDERIE.Controllers
         /// Methode qui permet d'obtenir la liste des catégories de dépenses d'une garderie
         /// </summary>
         /// <returns>La liste des catégories de dépenses d'une garderie dans la base de données</returns>
-        [Route("Garderie/ObtenirListeCategorieDepense")]
+        [Route("CategorieDepense/ObtenirListeCategorieDepense")]
         [HttpGet]
         public List<CategorieDepenseDTO> ObtenirListeCategorieDepense()
         {
