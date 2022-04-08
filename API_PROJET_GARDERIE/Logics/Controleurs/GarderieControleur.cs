@@ -57,7 +57,7 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
         /// <summary>
         /// Méthode de service permettant d'obtenir la liste des garderies.
         /// </summary>
-        /// <returns>Liste contenant les département.</returns>
+        /// <returns>Liste contenant les garderies.</returns>
         public List<GarderieDTO> ObtenirListeGarderie()
         {
             List<GarderieDTO> listeGarderieDTO = GarderieRepository.Instance.ObtenirListeGarderie();
