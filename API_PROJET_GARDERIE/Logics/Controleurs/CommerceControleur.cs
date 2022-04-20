@@ -64,6 +64,80 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
             else
                 throw new Exception("Erreur lors du chargement des Garderies, problème avec l'intégrité des données de la base de données.");
         }
+
+        /// <summary>
+        /// Méthode de service permettant d'obtenir le Commerce.
+        /// </summary>
+        /// <param name="descriptionCommerce">La description du commerce.</param>
+        /// <returns>Le DTO du commerce.</returns>
+        public CommerceDTO ObtenirCommerce(string descriptionCommerce)
+        {
+            CommerceDTO unCommerceDTO = CommerceRepository.Instance.ObtenirCommerce(descriptionCommerce);
+            CommerceModel commerce = new CommerceModel(unCommerceDTO.Description, unCommerceDTO.Adresse, unCommerceDTO.Telephone);
+            return new CommerceDTO(commerce);
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de créer le Commerce.
+        /// </summary>
+        /// <param name="commerceDTO">Le DTO du commerce.</param>
+        public void AjouterCommerce(CommerceDTO commerceDTO)
+        {
+            bool OK = false;
+            try
+            {
+                CommerceRepository.Instance.ObtenirIDCommerce(commerceDTO.Description);
+            }
+            catch (Exception)
+            {
+                OK = true;
+            }
+
+            if (OK)
+            {
+                CommerceModel unCommerce = new CommerceModel(commerceDTO.Description, commerceDTO.Adresse, commerceDTO.Telephone);
+                CommerceRepository.Instance.AjouterCommerce(commerceDTO);
+            }
+            else
+                throw new Exception("Erreur - Le commerce est déjà existant.");
+
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de modifier le Commerce.
+        /// </summary>
+        /// <param name="commerceDTO">Le DTO du commerce.</param>
+        public void ModifierCommerce(CommerceDTO commerceDTO)
+        {
+            CommerceDTO commerceDTOBD = ObtenirCommerce(commerceDTO.Description);
+            CommerceModel commerceBD = new CommerceModel(commerceDTOBD.Description, commerceDTOBD.Adresse, commerceDTOBD.Telephone);
+
+            if (commerceDTO.Adresse != commerceBD.Adresse || commerceDTO.Telephone != commerceBD.Telephone)
+                CommerceRepository.Instance.ModifierCommerce(commerceDTO);
+            else
+                throw new Exception("Erreur - Veuillez modifier au moins une valeur.");
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de supprimer le commerce.
+        /// </summary>
+        /// <param name="nomCommerce">Le nom de la Commerce.</param>
+        public void SupprimerCommerce(string nomCommerce)
+        {
+            CommerceDTO CommerceDTOBD = ObtenirCommerce(nomCommerce);
+            CommerceRepository.Instance.SupprimerCommerce(CommerceDTOBD);
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de vider la liste des commerces.
+        /// </summary>
+        public void ViderListeCommerce()
+        {
+            if (ObtenirListeCommerce().Count == 0)
+                throw new Exception("Erreur - La liste des Commerces est déjà vide.");
+            CommerceRepository.Instance.ViderListeCommerce();
+        }
+
         #endregion
     }
 }

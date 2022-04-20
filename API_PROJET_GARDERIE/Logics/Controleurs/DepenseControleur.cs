@@ -79,6 +79,21 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
         }
 
         /// <summary>
+        /// Méthode de service permettant d'obtenir une dépense.
+        /// </summary>
+        /// <param name="dateTemps">La date de la dépense. (Informations du Equals nécessaires)</param>
+        /// <returns>Le DTO de la dépense désiré.</returns>
+        public DepenseDTO ObtenirDepense(string nomGarderie, string dateTemps)
+        {
+            DepenseDTO depenseDTO = DepenseRepository.Instance.ObtenirDepense(nomGarderie, dateTemps);
+
+            if (depenseDTO.DateTemps.Equals(dateTemps))
+                return depenseDTO;
+            else
+                throw new Exception("Erreur lors de l'obtention de la dépense, problème avec l'intégrité des données de la base de données.");
+        }
+
+        /// <summary>
         /// Méthode de service permettant de créer la dépense.
         /// </summary>
         /// <param name="depenseDTO">Le DTO de la dépense.</param>
@@ -95,6 +110,63 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
             garderie.AjouterDepense(new DepenseModel(depenseDTO.DateTemps, depenseDTO.Montant));
 
             DepenseRepository.Instance.AjouterDepense(nomGarderie, depenseDTO);
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de modifier une dépense.
+        /// </summary>
+        /// <param name="departement">Le DTO du département de l'enseignant.</param>
+        /// <param name="enseignant">Le DTO de l'enseignant a modifier.</param>
+        public void ModifierDepense(string nomGarderie, DepenseDTO depenseDTO)
+        {
+            DepenseDTO uneDepenseDTO = ObtenirDepense(nomGarderie, depenseDTO.DateTemps);
+            DepenseModel depenseModele = new DepenseModel(uneDepenseDTO.DateTemps, uneDepenseDTO.Montant, uneDepenseDTO.categorieDepenseDTO.Description, uneDepenseDTO.categorieDepenseDTO.Pourcentage, uneDepenseDTO.commerceDTO.Description, uneDepenseDTO.commerceDTO.Adresse, uneDepenseDTO.commerceDTO.Telephone);
+
+            if (depenseDTO.Montant != depenseModele.Montant || uneDepenseDTO.categorieDepenseDTO.Description != depenseModele.categorieDepenseModel.Description || depenseDTO.categorieDepenseDTO.Pourcentage != depenseModele.categorieDepenseModel.Pourcentage || depenseDTO.commerceDTO.Description != depenseModele.commerceModel.Description || depenseDTO.commerceDTO.Adresse != depenseModele.commerceModel.Adresse || depenseDTO.commerceDTO.Telephone != depenseModele.commerceModel.Telephone)
+                DepenseRepository.Instance.ModifierDepense(nomGarderie, depenseDTO);
+            else
+                throw new Exception("Erreur - Veuillez modifier au moins une valeur.");
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de supprimer une dépense.
+        /// </summary>
+        /// <param name="nomGarderie">Le nom de la garderie.</param> 
+        /// <param name="dateTemps">La date de la dépense a supprimer.</param>
+        public void SupprimerDepense(string nomGarderie, string dateTemps)
+        {
+            GarderieDTO garderieDTO = GarderieControleur.Instance.ObtenirGarderie(nomGarderie);
+            GarderieModel garderieModel = new GarderieModel(garderieDTO.Nom, garderieDTO.Adresse, garderieDTO.Ville, garderieDTO.Province, garderieDTO.Telephone);
+
+            List<DepenseDTO> listeDepense = DepenseRepository.Instance.ObtenirListeDepense(nomGarderie);
+            foreach (DepenseDTO uneDepenseDTO in listeDepense)
+            {
+                garderieModel.AjouterDepense(new DepenseModel(uneDepenseDTO.DateTemps, uneDepenseDTO.Montant, uneDepenseDTO.categorieDepenseDTO.Description, uneDepenseDTO.categorieDepenseDTO.Pourcentage, uneDepenseDTO.commerceDTO.Description, uneDepenseDTO.commerceDTO.Adresse, uneDepenseDTO.commerceDTO.Telephone));
+            }
+
+            garderieModel.SupprimerDepense(new DepenseModel(dateTemps));
+
+            DepenseRepository.Instance.SupprimerDepense(nomGarderie, dateTemps);
+        }
+
+        /// <summary>
+        /// Méthode de service permettant vider la liste des dépenses d'une Garderie.
+        /// </summary>
+        /// <param name="nomGarderie">Le nom de la Garderie.</param>
+        public void ViderListeDepense(string nomGarderie)
+        {
+            GarderieDTO garderieDTO = GarderieControleur.Instance.ObtenirGarderie(nomGarderie);
+            GarderieModel garderie = new GarderieModel(garderieDTO.Nom, garderieDTO.Adresse, garderieDTO.Ville, garderieDTO.Province, garderieDTO.Telephone);
+
+            List<DepenseDTO> listeDepense = DepenseRepository.Instance.ObtenirListeDepense(nomGarderie);
+            foreach (DepenseDTO depenseDTO in listeDepense)
+            {
+                garderie.AjouterDepense(new DepenseModel(depenseDTO.DateTemps, depenseDTO.Montant, depenseDTO.categorieDepenseDTO.Description, depenseDTO.categorieDepenseDTO.Pourcentage, depenseDTO.commerceDTO.Description, depenseDTO.commerceDTO.Adresse, depenseDTO.commerceDTO.Telephone));
+            }
+
+            garderie.ViderListeDepense();
+
+            DepenseRepository.Instance.ViderListeDepense(nomGarderie);
         }
 
         #endregion MethodesServices

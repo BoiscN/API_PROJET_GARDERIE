@@ -152,14 +152,60 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
         /// <summary>
         /// Méthode de service permettant d'ajouter une dépense à la liste.
         /// </summary>
-        /// <param name="uneDepense">La dépense à ajouter.</param>
-        public void AjouterDepense(DepenseModel uneDepense)
+        /// <param name="depense">La dépense à ajouter.</param>
+        public void AjouterDepense(DepenseModel depense)
         {
-            if (SiDepensePresent(uneDepense))
+            if (SiDepensePresent(depense))
                 throw new Exception("Erreur - La dépense est déjà présente.");
-            listeDepense.Add(uneDepense);
-            if (!SiDepensePresent(uneDepense))
+            listeDepense.Add(depense);
+            if (!SiDepensePresent(depense))
                 throw new Exception("Erreur - Problème lors de l'ajout d'une dépense.");
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de modifier une dépense.
+        /// </summary>
+        /// <param name="depense">La dépense à modifier.</param>
+        public void ModifierDepense(DepenseModel depense)
+        {
+            if (listeDepense.Find(x => x.Equals(depense)) != null)
+            {
+                DepenseModel depenseListe = listeDepense.Find(x => x.Equals(depense));
+                depenseListe.DateTemps = depense.DateTemps;
+                depenseListe.Montant = depense.Montant;
+                depenseListe.categorieDepenseModel = depense.categorieDepenseModel;
+                depenseListe.commerceModel = depense.commerceModel;
+            }
+            else
+            {
+                throw new Exception("Erreur - La dépense est inexistante.");
+            }
+            
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de supprimer une dépense à la liste.
+        /// </summary>
+        /// <param name="depense">La depense à supprimer.</param>
+        public void SupprimerDepense(DepenseModel depense)
+        {
+            if (!SiDepensePresent(depense))
+                throw new Exception("Erreur - La dépense est déjà absente.");
+            listeDepense.Remove(depense);
+            if (SiDepensePresent(depense))
+                throw new Exception("Erreur - Problème lors de l'enlèvement de la dépense.");
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de vider la liste des dépenses de la Garderie.
+        /// </summary>
+        public void ViderListeDepense()
+        {
+            if (ObtenirNombreDepense() == 0)
+                throw new Exception("Erreur - La liste des dépenses est déjà vide.");
+            listeDepense.Clear();
+            if (!SiAucuneDepense())
+                throw new Exception("Erreur - Problème lors du vidage de la liste des dépenses.");
         }
 
         /// <summary>
