@@ -44,5 +44,44 @@ namespace API_PROJET_GARDERIE.Controllers
             {
             }
         }
+
+        [Route("Depense/ModifierDepense")]
+        [HttpPost]
+        public void ModifierDepense([FromQuery] string nomGarderie, [FromBody] DepenseDTO depenseDTO)
+        {
+            try
+            {
+                DepenseControleur.Instance.ModifierDepense(nomGarderie, depenseDTO);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        [Route("Depense/SupprimerDepense")]
+        [HttpPost]
+        public void SupprimerDepense([FromQuery] string nomGarderie, [FromQuery] string dateTemps)
+        {
+            try
+            {
+                DepenseControleur.Instance.SupprimerDepense(nomGarderie, new DepenseDTO(dateTemps));
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        [Route("Depense/ViderListeDepense")]
+        [HttpPost]
+        public void ViderListeDepense([FromQuery] string nomGarderie)
+        {
+            try
+            {
+                DepenseControleur.Instance.ViderListeDepense(nomGarderie);
+            }
+            catch (Exception)
+            {
+            }
+        }
     }
 }

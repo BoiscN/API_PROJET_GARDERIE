@@ -229,6 +229,125 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             }
         }
 
+        /// <summary>
+        /// Méthode de service permettant de modifier une dépense.
+        /// </summary>
+        /// <param name="nomGarderie">Le nom de la garderie.</param>
+        /// <param name="depenseDTO">Le DTO de la dépense.</param>
+        public void ModifierDepense(string nomGarderie, DepenseDTO depenseDTO)
+        {
+            SqlCommand command = new SqlCommand(null, connexion);
+
+            command.CommandText = " UPDATE T_Depenses " +
+                                     " SET Montant = @montant, " +
+                                     "     IdCategorieDepense = @idCategorieDepense," +
+                                     "     IdCommerce = @idCommerce" +
+                                   " WHERE DateTemps = @dateTemps " +
+                                   "   AND IdGarderie = @idGarderie ";
+
+            SqlParameter dateTempsParam = new SqlParameter("@dateTemps", SqlDbType.DateTime);
+            SqlParameter montantParam = new SqlParameter("@montant", SqlDbType.Money);
+            SqlParameter idCategorieDepenseParam = new SqlParameter("@idCategorieDepense", SqlDbType.Int);
+            SqlParameter idCommerceParam = new SqlParameter("@idCommerce", SqlDbType.Int);
+            SqlParameter idGarderieParam = new SqlParameter("@idGarderie", SqlDbType.Int);
+
+            dateTempsParam.Value = depenseDTO.DateTemps;
+            montantParam.Value = depenseDTO.Montant;
+            idCategorieDepenseParam.Value = CategorieDepenseRepository.Instance.ObtenirIDCategorieDepense(depenseDTO.categorieDepenseDTO.Description);
+            idCommerceParam.Value = CommerceRepository.Instance.ObtenirIDCommerce(depenseDTO.commerceDTO.Description);
+            idGarderieParam.Value = GarderieRepository.Instance.ObtenirIDGarderie(nomGarderie);
+
+            command.Parameters.Add(dateTempsParam);
+            command.Parameters.Add(montantParam);
+            command.Parameters.Add(idGarderieParam);
+            command.Parameters.Add(idCategorieDepenseParam);
+            command.Parameters.Add(idCommerceParam);
+
+            try
+            {
+                OuvrirConnexion();
+                command.Prepare();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de la modification d'une dépense...", ex);
+            }
+            finally
+            {
+                FermerConnexion();
+            }
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de supprimer une dépense.
+        /// </summary>
+        /// <param name="nomGarderie">Le nom de la Garderie.</param>
+        /// <param name="dateTemps">La date de la dépense.</param>
+        public void SupprimerDepense(string nomGarderie, string dateTemps)
+        {
+            SqlCommand command = new SqlCommand(null, connexion);
+
+            command.CommandText = " DELETE " +
+                                    " FROM T_Depenses " +
+                                   " WHERE IdDepense = @id ";
+
+            SqlParameter idParam = new SqlParameter("@id", SqlDbType.Int);
+
+            idParam.Value = ObtenirIDDepense(nomGarderie, dateTemps);
+
+            command.Parameters.Add(idParam);
+
+            try
+            {
+                OuvrirConnexion();
+                command.Prepare();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de la supression d'une dépense...", ex);
+            }
+            finally
+            {
+                FermerConnexion();
+            }
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de vider la liste des dépenses d'une Garderie.
+        /// </summary>
+        /// <param name="nomGarderie">Le nom de la Garderie.</param>
+        public void ViderListeDepense(string nomGarderie)
+        {
+            SqlCommand command = new SqlCommand(null, connexion);
+
+            command.CommandText = " DELETE " +
+                                    " FROM T_Depenses " +
+                                   " WHERE IdGarderie = @id ";
+
+            SqlParameter idParam = new SqlParameter("@id", SqlDbType.Int);
+
+            idParam.Value = GarderieRepository.Instance.ObtenirIDGarderie(nomGarderie);
+
+            command.Parameters.Add(idParam);
+
+            try
+            {
+                OuvrirConnexion();
+                command.Prepare();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de la vidange des dépenses...", ex);
+            }
+            finally
+            {
+                FermerConnexion();
+            }
+        }
+
         #endregion
     }
 }

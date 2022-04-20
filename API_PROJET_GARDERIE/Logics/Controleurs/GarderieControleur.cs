@@ -52,8 +52,6 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
 
         #region MethodesServices
 
-        #region MethodesGarderie
-
         /// <summary>
         /// Méthode de service permettant d'obtenir la liste des garderies.
         /// </summary>
@@ -145,8 +143,6 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
                 throw new Exception("Erreur - La liste des Garderies est déjà vide.");
             GarderieRepository.Instance.ViderListeGarderie();
         }
-
-        #endregion MethodesGarderie
 
         #endregion MethodesServices
     }

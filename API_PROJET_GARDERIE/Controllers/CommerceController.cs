@@ -27,5 +27,93 @@ namespace API_PROJET_GARDERIE.Controllers
             }
             return liste;
         }
+
+        /// <summary>
+        /// Permet d'obtenir un commerce selon son DTO
+        /// </summary>
+        /// <param name="commerceDTO">Le DTO du commercee</param>
+        /// <returns>Une CommerceDTO</returns>
+        [Route("Commerce/ObtenirCommerce")]
+        [HttpGet]
+        public CommerceDTO ObtenirCommerce([FromQuery] CommerceDTO commerceDTO)
+        {
+            CommerceDTO unCommerce;
+            try
+            {
+                unCommerce = CommerceControleur.Instance.ObtenirCommerce(commerceDTO);
+            }
+            catch
+            {
+                unCommerce = new CommerceDTO();
+            }
+            return unCommerce;
+        }
+
+        /// <summary>
+        /// Permet d'ajouter un Commerce
+        /// </summary>
+        /// <param name="commerceDTO">La CommerceDTO à ajouter</param>
+        [Route("Commerce/AjouterGarderie")]
+        [HttpPost]
+        public void AjouterCommerce([FromBody] CommerceDTO commerceDTO)
+        {
+            try
+            {
+                CommerceControleur.Instance.AjouterCommerce(commerceDTO);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// Permet de modifier un commerce existant
+        /// </summary>
+        /// <param name="commerceDTO">Le commerce modifié</param>
+        [Route("Commerce/ModifierCommerce")]
+        [HttpPost]
+        public void ModifierCommerce([FromBody] CommerceDTO commerceDTO)
+        {
+            try
+            {
+                CommerceControleur.Instance.ModifierCommerce(commerceDTO);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// Permet de supprimer un Commerce
+        /// </summary>
+        /// <param name="descriptionCommerce">La description du commerce à supprimer</param>
+        [Route("Commerce/SupprimerCommerce")]
+        [HttpPost]
+        public void SupprimerCommerce([FromQuery] string descriptionCommerce)
+        {
+            try
+            {
+                CommerceControleur.Instance.SupprimerCommerce(descriptionCommerce);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// Supprimer toutes les commerces existant dans la base de données
+        /// </summary>
+        [Route("Commerce/ViderListeCommerce")]
+        [HttpPost]
+        public void ViderListeCommerce()
+        {
+            try
+            {
+                CommerceControleur.Instance.ViderListeCommerce();
+            }
+            catch (Exception)
+            {
+            }
+        }
     }
 }
