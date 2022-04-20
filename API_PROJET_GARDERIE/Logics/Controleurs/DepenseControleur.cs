@@ -132,8 +132,8 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
         /// Méthode de service permettant de supprimer une dépense.
         /// </summary>
         /// <param name="nomGarderie">Le nom de la garderie.</param> 
-        /// <param name="depenseDTO">Le DTO de la dépense a supprimer.</param>
-        public void SupprimerDepense(string nomGarderie, DepenseDTO depenseDTO)
+        /// <param name="dateTemps">La date de la dépense a supprimer.</param>
+        public void SupprimerDepense(string nomGarderie, string dateTemps)
         {
             GarderieDTO garderieDTO = GarderieControleur.Instance.ObtenirGarderie(nomGarderie);
             GarderieModel garderieModel = new GarderieModel(garderieDTO.Nom, garderieDTO.Adresse, garderieDTO.Ville, garderieDTO.Province, garderieDTO.Telephone);
@@ -141,12 +141,12 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
             List<DepenseDTO> listeDepense = DepenseRepository.Instance.ObtenirListeDepense(nomGarderie);
             foreach (DepenseDTO uneDepenseDTO in listeDepense)
             {
-                garderieModel.AjouterDepense(new DepenseModel(depenseDTO.DateTemps, depenseDTO.Montant, depenseDTO.categorieDepenseDTO.Description, depenseDTO.categorieDepenseDTO.Pourcentage, depenseDTO.commerceDTO.Description, depenseDTO.commerceDTO.Adresse, depenseDTO.commerceDTO.Telephone));
+                garderieModel.AjouterDepense(new DepenseModel(uneDepenseDTO.DateTemps, uneDepenseDTO.Montant, uneDepenseDTO.categorieDepenseDTO.Description, uneDepenseDTO.categorieDepenseDTO.Pourcentage, uneDepenseDTO.commerceDTO.Description, uneDepenseDTO.commerceDTO.Adresse, uneDepenseDTO.commerceDTO.Telephone));
             }
 
-            garderieModel.SupprimerDepense(new DepenseModel(depenseDTO.DateTemps, depenseDTO.Montant, depenseDTO.categorieDepenseDTO.Description, depenseDTO.categorieDepenseDTO.Pourcentage, depenseDTO.commerceDTO.Description, depenseDTO.commerceDTO.Adresse, depenseDTO.commerceDTO.Telephone));
+            garderieModel.SupprimerDepense(new DepenseModel(dateTemps));
 
-            DepenseRepository.Instance.SupprimerDepense(nomGarderie, depenseDTO.DateTemps);
+            DepenseRepository.Instance.SupprimerDepense(nomGarderie, dateTemps);
         }
 
         /// <summary>

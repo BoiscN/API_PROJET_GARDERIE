@@ -29,6 +29,26 @@ namespace API_PROJET_GARDERIE.Controllers
         }
 
         /// <summary>
+        /// Methode qui permet d'obtenir une dépense selon une garderie
+        /// </summary>
+        /// <returns>La dépense d'une garderie dans la base de données</returns>
+        [Route("Depense/ObtenirDepense")]
+        [HttpGet]
+        public DepenseDTO ObtenirDepense([FromQuery] string nomGarderie, [FromQuery] string dateTemps)
+        {
+            DepenseDTO uneDepense;
+            try
+            {
+                uneDepense = DepenseControleur.Instance.ObtenirDepense(nomGarderie, dateTemps);
+            }
+            catch
+            {
+                uneDepense = new DepenseDTO();
+            }
+            return uneDepense;
+        }
+
+        /// <summary>
         /// Permet d'ajouter une dépense
         /// </summary>
         /// <param name="depenseDTO">La DepenseDTO à ajouter</param>
@@ -64,7 +84,7 @@ namespace API_PROJET_GARDERIE.Controllers
         {
             try
             {
-                DepenseControleur.Instance.SupprimerDepense(nomGarderie, new DepenseDTO(dateTemps));
+                DepenseControleur.Instance.SupprimerDepense(nomGarderie, dateTemps);
             }
             catch (Exception)
             {

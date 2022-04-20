@@ -169,7 +169,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 OuvrirConnexion();
                 SqlDataReader reader = command.ExecuteReader();
                 reader.Read();
-                uneDepense = new DepenseDTO(reader.GetString(1), reader.GetDouble(2));
+                uneDepense = new DepenseDTO(reader.GetDateTime(1).ToString(), (double) reader.GetDecimal(2));
                 reader.Close();
                 return uneDepense;
             }
