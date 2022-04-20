@@ -31,16 +31,16 @@ namespace API_PROJET_GARDERIE.Controllers
         /// <summary>
         /// Permet d'obtenir un commerce selon son DTO
         /// </summary>
-        /// <param name="commerceDTO">Le DTO du commercee</param>
-        /// <returns>Une CommerceDTO</returns>
+        /// <param name="descriptionCommerce">La description du commerce</param>
+        /// <returns>Un CommerceDTO</returns>
         [Route("Commerce/ObtenirCommerce")]
         [HttpGet]
-        public CommerceDTO ObtenirCommerce([FromQuery] CommerceDTO commerceDTO)
+        public CommerceDTO ObtenirCommerce([FromQuery] string descriptionCommerce)
         {
             CommerceDTO unCommerce;
             try
             {
-                unCommerce = CommerceControleur.Instance.ObtenirCommerce(commerceDTO);
+                unCommerce = CommerceControleur.Instance.ObtenirCommerce(descriptionCommerce);
             }
             catch
             {
@@ -53,7 +53,7 @@ namespace API_PROJET_GARDERIE.Controllers
         /// Permet d'ajouter un Commerce
         /// </summary>
         /// <param name="commerceDTO">La CommerceDTO à ajouter</param>
-        [Route("Commerce/AjouterGarderie")]
+        [Route("Commerce/AjouterCommerce")]
         [HttpPost]
         public void AjouterCommerce([FromBody] CommerceDTO commerceDTO)
         {

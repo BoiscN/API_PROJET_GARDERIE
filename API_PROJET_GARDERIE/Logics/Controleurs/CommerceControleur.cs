@@ -68,11 +68,11 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
         /// <summary>
         /// Méthode de service permettant d'obtenir le Commerce.
         /// </summary>
-        /// <param name="commerceDTO">Le commerce.</param>
+        /// <param name="descriptionCommerce">La description du commerce.</param>
         /// <returns>Le DTO du commerce.</returns>
-        public CommerceDTO ObtenirCommerce(CommerceDTO commerceDTO)
+        public CommerceDTO ObtenirCommerce(string descriptionCommerce)
         {
-            CommerceDTO unCommerceDTO = CommerceRepository.Instance.ObtenirCommerce(commerceDTO.Description);
+            CommerceDTO unCommerceDTO = CommerceRepository.Instance.ObtenirCommerce(descriptionCommerce);
             CommerceModel commerce = new CommerceModel(unCommerceDTO.Description, unCommerceDTO.Adresse, unCommerceDTO.Telephone);
             return new CommerceDTO(commerce);
         }
@@ -109,7 +109,7 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
         /// <param name="commerceDTO">Le DTO du commerce.</param>
         public void ModifierCommerce(CommerceDTO commerceDTO)
         {
-            CommerceDTO commerceDTOBD = ObtenirCommerce(commerceDTO);
+            CommerceDTO commerceDTOBD = ObtenirCommerce(commerceDTO.Description);
             CommerceModel commerceBD = new CommerceModel(commerceDTOBD.Description, commerceDTOBD.Adresse, commerceDTOBD.Telephone);
 
             if (commerceDTO.Adresse != commerceBD.Adresse || commerceDTO.Telephone != commerceBD.Telephone)
@@ -124,7 +124,7 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
         /// <param name="nomCommerce">Le nom de la Commerce.</param>
         public void SupprimerCommerce(string nomCommerce)
         {
-            CommerceDTO CommerceDTOBD = ObtenirCommerce(new CommerceDTO(nomCommerce));
+            CommerceDTO CommerceDTOBD = ObtenirCommerce(nomCommerce);
             CommerceRepository.Instance.SupprimerCommerce(CommerceDTOBD);
         }
 
