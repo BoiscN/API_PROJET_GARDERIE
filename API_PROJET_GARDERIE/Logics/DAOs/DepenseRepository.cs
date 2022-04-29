@@ -187,7 +187,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         /// Méthode de service permettant d'ajouter une dépense.
         /// </summary>
         /// <param name="nomGarderie">Le nom de la Garderie.</param>
-        /// <param name="depenseDTO">Le DTO du departement.</param>
+        /// <param name="depenseDTO">Le DTO de la dépense.</param>
         public void AjouterDepense(string nomGarderie, DepenseDTO depenseDTO)
         {
             SqlCommand command = new SqlCommand(null, connexion);

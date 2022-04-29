@@ -27,7 +27,8 @@ namespace API_PROJET_GARDERIE.Logics.DTOs
         /// <summary>
         /// Constructeur par défaut.
         /// </summary>
-        public CategorieDepenseDTO() {
+        public CategorieDepenseDTO()
+        {
             Description = "";
             Pourcentage = 0;
         }
@@ -37,7 +38,7 @@ namespace API_PROJET_GARDERIE.Logics.DTOs
         /// </summary>
         /// <param name="description">Description de la Catégorie de dépense.</param>
         /// <param name="pourcentage">Pourcentage de la Catégorie de dépense.</param>
-        public CategorieDepenseDTO(string description="", double pourcentage=0)
+        public CategorieDepenseDTO(string description = "", double pourcentage = 0)
         {
             Description = description;
             Pourcentage = pourcentage;
