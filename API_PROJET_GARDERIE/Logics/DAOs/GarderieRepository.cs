@@ -98,7 +98,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                                                 "   FROM T_Garderies " +
                                                 "  WHERE Nom = @nom ", connexion);
 
-            SqlParameter nomParam = new SqlParameter("@nom", SqlDbType.VarChar, 50);
+            SqlParameter nomParam = new SqlParameter("@nom", SqlDbType.VarChar, 100);
 
             nomParam.Value = nomGarderie;
 

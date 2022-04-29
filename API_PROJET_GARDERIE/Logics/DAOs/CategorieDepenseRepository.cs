@@ -48,7 +48,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         /// <summary>
         /// Constructeur privée du repository.
         /// </summary>
-        private CategorieDepenseRepository() :base() {}
+        private CategorieDepenseRepository() : base() { }
 
         #endregion
 
@@ -71,7 +71,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    CategorieDepenseDTO categorieDepense = new CategorieDepenseDTO(reader.GetString(1), (double) reader.GetDecimal(2));
+                    CategorieDepenseDTO categorieDepense = new CategorieDepenseDTO(reader.GetString(1), (double)reader.GetDecimal(2));
                     liste.Add(categorieDepense);
                 }
                 reader.Close();
@@ -119,6 +119,202 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             {
                 throw new Exception("Erreur lors de l'obtention d'un id d'une CategorieDepense par sa description...", ex);
             }
+            finally
+            {
+                FermerConnexion();
+            }
+        }
+        /// <summary>
+        /// Méthode de service permettant d'obtenir une categorieDepense selon ses informations uniques.
+        /// </summary>
+        /// <param name="descriptionCategorieDepense">Nom du commerce.</param>
+        /// <returns>Le DTO du commerce.</returns>
+        public CategorieDepenseDTO ObtenirCategorieDepense(string descriptionCategorieDepense)
+        {
+            SqlCommand command = new SqlCommand(" SELECT * " +
+                                                " FROM T_CategoriesDepense " +
+                                                " WHERE Description = @description", connexion);
+
+            SqlParameter nomParam = new SqlParameter("@description", SqlDbType.VarChar, 50);
+
+            nomParam.Value = descriptionCategorieDepense;
+
+            command.Parameters.Add(nomParam);
+
+            CategorieDepenseDTO uneCategorieDepense;
+
+            try
+            {
+                OuvrirConnexion();
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+                uneCategorieDepense = new CategorieDepenseDTO(reader.GetString(1), (double)reader.GetDecimal(2));
+                reader.Close();
+                return uneCategorieDepense;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de l'obtention d'une CategorieDepense par sa description...", ex);
+            }
+            finally
+            {
+                FermerConnexion();
+            }
+        }
+
+        /// <summary>
+        /// Méthode de service permettant d'ajouter un Commerce.
+        /// </summary>
+        /// <param name="categorieDepenseDTO">Le DTO du commerce.</param>
+        public void AjouterCategorieDepense(CategorieDepenseDTO categorieDepenseDTO)
+        {
+            SqlCommand command = new SqlCommand(null, connexion);
+
+            command.CommandText = " INSERT INTO T_CategoriesDepense (Description, Pourcentage) " +
+                                  " VALUES (@description, @pourcentage) ";
+
+            SqlParameter descriptionParam = new SqlParameter("@description", SqlDbType.VarChar, 50);
+            SqlParameter pourcentageParam = new SqlParameter("@pourcentage", SqlDbType.Decimal); ;
+
+            pourcentageParam.Precision = 18;
+            pourcentageParam.Scale = 8;
+
+            descriptionParam.Value = categorieDepenseDTO.Description;
+            pourcentageParam.Value = categorieDepenseDTO.Pourcentage;
+
+
+            command.Parameters.Add(descriptionParam);
+            command.Parameters.Add(pourcentageParam);
+
+
+            try
+            {
+                OuvrirConnexion();
+                command.Prepare();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new DBUniqueException("Erreur lors de l'ajout d'une CategorieDepense...", ex);
+            }
+            finally
+            {
+                FermerConnexion();
+            }
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de modifier une categorieDepense.
+        /// </summary>
+        /// <param name="categorieDepenseDTO">Le DTO categorieDepense.</param>
+        public void ModifierCategorieDepense(CategorieDepenseDTO categorieDepenseDTO)
+        {
+            SqlCommand command = new SqlCommand(null, connexion);
+
+            command.CommandText = " UPDATE T_CategoriesDepense " +
+                                     "SET     Pourcentage = @pourcentage " +
+                                   " WHERE Description = @description ";
+
+            SqlParameter descriptionParam = new SqlParameter("@description", SqlDbType.VarChar, 50);
+            SqlParameter pourcentageParam = new SqlParameter("@pourcentage", SqlDbType.Decimal);
+
+            pourcentageParam.Precision = 18;
+            pourcentageParam.Scale = 8;
+
+            descriptionParam.Value = categorieDepenseDTO.Description;
+            pourcentageParam.Value = categorieDepenseDTO.Pourcentage;
+
+
+            command.Parameters.Add(descriptionParam);
+            command.Parameters.Add(pourcentageParam);
+
+
+            try
+            {
+                OuvrirConnexion();
+                command.Prepare();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de la modification d'une categorieDepense...", ex);
+            }
+            finally
+            {
+                FermerConnexion();
+            }
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de supprimer une categorieDepense.
+        /// </summary>
+        /// <param name="categorieDepenseDTO">Le DTO du categorieDepense.</param>
+        public void SupprimerCategorieDepense(CategorieDepenseDTO categorieDepenseDTO)
+        {
+            SqlCommand command = new SqlCommand(null, connexion);
+
+            command.CommandText = " DELETE " +
+                                    " FROM T_CategoriesDepense " +
+                                   " WHERE IdCategorieDepense = @id ";
+
+            SqlParameter idParam = new SqlParameter("@id", SqlDbType.Int);
+
+            idParam.Value = ObtenirIDCategorieDepense(categorieDepenseDTO.Description);
+
+            command.Parameters.Add(idParam);
+
+            try
+            {
+                OuvrirConnexion();
+                command.Prepare();
+                command.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                if (e.Number == 547)
+                {
+                    throw new DBRelationException("Impossible de supprimer le commerce.", e); // Dépenses associés.
+                }
+                else throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de la supression d'une categorieDepense...", ex);
+            }
+
+            finally
+            {
+                FermerConnexion();
+            }
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de vider la liste des categorieDepenses.
+        /// </summary>
+        public void ViderListeCategorieDepense()
+        {
+            SqlCommand command = new SqlCommand(null, connexion);
+
+            command.CommandText = " DELETE FROM T_CategoriesDepense";
+            try
+            {
+                OuvrirConnexion();
+                command.Prepare();
+                command.ExecuteNonQuery();
+            }
+            catch (SqlException e)
+            {
+                if (e.Number == 547)
+                {
+                    throw new DBRelationException("Impossible de supprimer les categoriesDepenses.", e); // Dépenses associés.
+                }
+                else throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de la supression d'une categorieDepense...", ex);
+            }
+
             finally
             {
                 FermerConnexion();
