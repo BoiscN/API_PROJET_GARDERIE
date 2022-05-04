@@ -12,21 +12,21 @@ using API_PROJET_GARDERIE.Logics.Modeles;
 namespace API_PROJET_GARDERIE.Logics.DAOs
 {
     /// <summary>
-    /// Classe représentant le répository d'une Enfant.
+    /// Classe représentant le répository d'un educateur.
     /// </summary>
-    public class EnfantRepository : Repository
+    public class EducateurRepository : Repository
     {
         #region AttributsProprietes
 
         /// <summary>
         /// Instance unique du repository.
         /// </summary>
-        private static EnfantRepository instance;
+        private static EducateurRepository instance;
 
         /// <summary>
         /// Propriété permettant d'accèder à l'instance unique de la classe.
         /// </summary>
-        public static EnfantRepository Instance
+        public static EducateurRepository Instance
         {
             get
             {
@@ -34,7 +34,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 if (instance == null)
                 {
                     //... on crée l'instance unique...
-                    instance = new EnfantRepository();
+                    instance = new EducateurRepository();
                 }
                 //...on retourne l'instance unique.
                 return instance;
@@ -48,22 +48,22 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         /// <summary>
         /// Constructeur privée du repository.
         /// </summary>
-        private EnfantRepository() :base() {}
+        private EducateurRepository() :base() {}
 
         #endregion
 
         #region MethodesService
 
         /// <summary>
-        /// Méthode de service permettant d'obtenir la liste des enfants.
+        /// Méthode de service permettant d'obtenir la liste des educateurs.
         /// </summary>
         /// <returns>Liste des enfants.</returns>
-        public List<EnfantDTO> ObtenirListeEnfant()
+        public List<EducateurDTO> ObtenirListeEducateur()
         {
             SqlCommand command = new SqlCommand(" SELECT * " +
-                                                "   FROM T_Enfants ", connexion);
+                                                "   FROM T_Educateurs ", connexion);
 
-            List<EnfantDTO> liste = new List<EnfantDTO>();
+            List<EducateurDTO> liste = new List<EducateurDTO>();
 
             try
             {
@@ -71,15 +71,15 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    EnfantDTO enfant = new EnfantDTO(reader.GetString(1), reader.GetString(2), reader.GetDateTime(3).ToString(), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(7));
-                    liste.Add(enfant);
+                    EducateurDTO educateur = new EducateurDTO(reader.GetString(1), reader.GetString(2), reader.GetDateTime(3).ToString(), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(7));
+                    liste.Add(educateur);
                 }
                 reader.Close();
                 return liste;
             }
             catch (Exception ex)
             {
-                throw new Exception("Erreur lors de l'obtention de la liste des enfants...", ex);
+                throw new Exception("Erreur lors de l'obtention de la liste des educateurs...", ex);
             }
             finally
             {
@@ -88,16 +88,16 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         }
 
         /// <summary>
-        /// Méthode de service permettant d'obtenir le ID d'un enfant selon ses informatiques uniques.
+        /// Méthode de service permettant d'obtenir le ID d'un educateur selon ses informatiques uniques.
         /// </summary>
-        /// <param name="nomEnfant">Le nom de l'enfant.</param>
-        /// <param name="prenomEnfant">Le prenom de l'enfant.</param>
-        /// <param name="dateNaissanceEnfant">La date de naissance de l'enfant.</param>
-        /// <returns>Le ID de l'enfant.</returns>    
-        public int ObtenirIDEnfant(string nomEnfant, string prenomEnfant, string dateNaissanceEnfant)
+        /// <param name="nomEducateur">Le nom de l'educateur.</param>
+        /// <param name="prenomEducateur">Le prenom de l'educateur.</param>
+        /// <param name="dateNaissanceEducateur">La date de naissance de l'educateur.</param>
+        /// <returns>Le ID de l'educateur.</returns>    
+        public int ObtenirIDEducateur(string nomEducateur, string prenomEducateur, string dateNaissanceEducateur)
         {
-            SqlCommand command = new SqlCommand(" SELECT IdEnfant " +
-                                                "   FROM T_Enfants " +
+            SqlCommand command = new SqlCommand(" SELECT IdEducateur " +
+                                                "   FROM T_Educateurs " +
                                                 "  WHERE Nom = @nom " +
                                                 "  AND Prenom = @prenom " +
                                                 "  AND DateNaissance = @dateNaissance", connexion);
@@ -106,9 +106,9 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             SqlParameter prenomParam = new SqlParameter("@prenom", SqlDbType.VarChar, 50);
             SqlParameter dateNaissanceParam = new SqlParameter("@dateNaissance", SqlDbType.Date);
 
-            nomParam.Value = nomEnfant;
-            prenomParam.Value = prenomEnfant;
-            dateNaissanceParam.Value = dateNaissanceEnfant;
+            nomParam.Value = nomEducateur;
+            prenomParam.Value = prenomEducateur;
+            dateNaissanceParam.Value = dateNaissanceEducateur;
 
             command.Parameters.Add(nomParam);
             command.Parameters.Add(prenomParam);
@@ -127,7 +127,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             }
             catch (Exception ex)
             {
-                throw new Exception("Erreur lors de l'obtention d'un id d'un enfant par son nom, son prenom et sa date de naissance...", ex);
+                throw new Exception("Erreur lors de l'obtention d'un id d'un educateur par son nom, son prenom et sa date de naissance...", ex);
             }
             finally
             {
@@ -136,16 +136,16 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         }
 
         /// <summary>
-        /// Méthode de service permettant d'obtenir un enfant selon ses informations uniques.
+        /// Méthode de service permettant d'obtenir un educateur selon ses informations uniques.
         /// </summary>
-        /// <param name="nomEnfant">Le nom de l'enfant.</param>
-        /// <param name="prenomEnfant">Le prenom de l'enfant.</param>
-        /// <param name="dateNaissanceEnfant">La date de naissance de l'enfant.</param>
-        /// <returns>Le DTO de l'enfant.</returns>
-        public EnfantDTO ObtenirEnfant(string nomEnfant, string prenomEnfant, string dateNaissanceEnfant)
+        /// <param name="nomEducateur">Le nom de l'educateur.</param>
+        /// <param name="prenomEducateur">Le prenom de l'educateur.</param>
+        /// <param name="dateNaissanceEducateur">La date de naissance de l'educateur.</param>
+        /// <returns>Le DTO de l'educateur.</returns>
+        public EducateurDTO ObtenirEducateur(string nomEducateur, string prenomEducateur, string dateNaissanceEducateur)
         {
             SqlCommand command = new SqlCommand(" SELECT * " +
-                                                " FROM T_Enfants " +
+                                                " FROM T_Educateurs " +
                                                 "  WHERE Nom = @nom " +
                                                 "  AND Prenom = @prenom " +
                                                 "  AND DateNaissance = @dateNaissance", connexion);
@@ -154,28 +154,28 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             SqlParameter prenomParam = new SqlParameter("@prenom", SqlDbType.VarChar, 50);
             SqlParameter dateNaissanceParam = new SqlParameter("@dateNaissance", SqlDbType.Date);
 
-            nomParam.Value = nomEnfant;
-            prenomParam.Value = prenomEnfant;
-            dateNaissanceParam.Value = dateNaissanceEnfant;
+            nomParam.Value = nomEducateur;
+            prenomParam.Value = prenomEducateur;
+            dateNaissanceParam.Value = dateNaissanceEducateur;
 
             command.Parameters.Add(nomParam);
             command.Parameters.Add(prenomParam);
             command.Parameters.Add(dateNaissanceParam);
 
-            EnfantDTO unEnfant;
+            EducateurDTO unEducateur;
 
             try
             {
                 OuvrirConnexion();
                 SqlDataReader reader = command.ExecuteReader();
                 reader.Read();
-                unEnfant = new EnfantDTO(reader.GetString(1), reader.GetString(2), reader.GetDateTime(3).ToString(), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(7));
+                unEducateur = new EducateurDTO(reader.GetString(1), reader.GetString(2), reader.GetDateTime(3).ToString(), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(7));
                 reader.Close();
-                return unEnfant;
+                return unEducateur;
             }
             catch (Exception ex)
             {
-                throw new Exception("Erreur lors de l'obtention d'un enfant par son nom, son prenom et sa date de naissance...", ex);
+                throw new Exception("Erreur lors de l'obtention d'un educateur par son nom, son prenom et sa date de naissance...", ex);
             }
             finally
             {
@@ -184,14 +184,14 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         }
 
         /// <summary>
-        /// Méthode de service permettant d'ajouter un enfant.
+        /// Méthode de service permettant d'ajouter un educateur.
         /// </summary>
-        /// <param name="enfantDTO">Le DTO de l'enfant.</param>
-        public void AjouterEnfant(EnfantDTO enfantDTO)
+        /// <param name="educateurDTO">Le DTO de l'educateur.</param>
+        public void AjouterEducateur(EducateurDTO educateurDTO)
         {
             SqlCommand command = new SqlCommand(null, connexion);
 
-            command.CommandText = " INSERT INTO T_Enfants (Nom, Prenom, DateNaissance, Adresse, Ville, Province, Telephone) " +
+            command.CommandText = " INSERT INTO T_Educateurs (Nom, Prenom, DateNaissance, Adresse, Ville, Province, Telephone) " +
                                   " VALUES (@nom, @prenom, @dateNaissance, @adresse, @ville, @province, @telephone) ";
 
             SqlParameter nomParam = new SqlParameter("@nom", SqlDbType.VarChar, 50);
@@ -202,13 +202,13 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             SqlParameter provinceParam = new SqlParameter("@province", SqlDbType.VarChar, 100);
             SqlParameter telephoneParam = new SqlParameter("@telephone", SqlDbType.VarChar, 12);
 
-            nomParam.Value = enfantDTO.Nom;
-            prenomParam.Value = enfantDTO.Prenom;
-            dateNaissanceParam.Value = enfantDTO.DateNaissance;
-            adresseParam.Value = enfantDTO.Adresse;
-            villeParam.Value = enfantDTO.Ville;
-            provinceParam.Value = enfantDTO.Province;
-            telephoneParam.Value = enfantDTO.Telephone;
+            nomParam.Value = educateurDTO.Nom;
+            prenomParam.Value = educateurDTO.Prenom;
+            dateNaissanceParam.Value = educateurDTO.DateNaissance;
+            adresseParam.Value = educateurDTO.Adresse;
+            villeParam.Value = educateurDTO.Ville;
+            provinceParam.Value = educateurDTO.Province;
+            telephoneParam.Value = educateurDTO.Telephone;
 
             command.Parameters.Add(nomParam);
             command.Parameters.Add(prenomParam);
@@ -226,7 +226,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             }
             catch (Exception ex)
             {
-                throw new DBUniqueException("Erreur lors de l'ajout d'un enfant...", ex);
+                throw new DBUniqueException("Erreur lors de l'ajout d'un educateur...", ex);
             }
             finally
             {
@@ -235,14 +235,14 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         }
 
         /// <summary>
-        /// Méthode de service permettant de modifier un enfant.
+        /// Méthode de service permettant de modifier un educateur.
         /// </summary>
-        /// <param name="enfant">Le DTO de l'enfant.</param>
-        public void ModifierEnfant(EnfantDTO enfant)
+        /// <param name="educateur">Le DTO de l'educateur.</param>
+        public void ModifierEducateur(EducateurDTO educateur)
         {
             SqlCommand command = new SqlCommand(null, connexion);
 
-            command.CommandText = " UPDATE T_Enfants " +
+            command.CommandText = " UPDATE T_Educateurs " +
                                      " SET Adresse = @adresse, " +
                                      "     Ville = @ville, " +
                                      "     Province = @province, " +
@@ -259,13 +259,13 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             SqlParameter provinceParam = new SqlParameter("@province", SqlDbType.VarChar, 100);
             SqlParameter telephoneParam = new SqlParameter("@telephone", SqlDbType.VarChar, 12);
 
-            nomParam.Value = enfant.Nom;
-            prenomParam.Value = enfant.Prenom;
-            dateNaissanceParam.Value = enfant.DateNaissance;
-            adresseParam.Value = enfant.Adresse;
-            villeParam.Value = enfant.Ville;
-            provinceParam.Value = enfant.Province;
-            telephoneParam.Value = enfant.Telephone;
+            nomParam.Value = educateur.Nom;
+            prenomParam.Value = educateur.Prenom;
+            dateNaissanceParam.Value = educateur.DateNaissance;
+            adresseParam.Value = educateur.Adresse;
+            villeParam.Value = educateur.Ville;
+            provinceParam.Value = educateur.Province;
+            telephoneParam.Value = educateur.Telephone;
 
             command.Parameters.Add(nomParam);
             command.Parameters.Add(prenomParam);
@@ -283,7 +283,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             }
             catch (Exception ex)
             {
-                throw new Exception("Erreur lors de la modification d'un enfant...", ex);
+                throw new Exception("Erreur lors de la modification d'un educateur...", ex);
             }
             finally
             {
@@ -292,15 +292,15 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         }
 
         /// <summary>
-        /// Méthode de service permettant de supprimer un enfant.
+        /// Méthode de service permettant de supprimer un educateur.
         /// </summary>
-        /// <param name="enfant">Le DTO de l'enfant.</param>
-        public void SupprimerEnfant(EnfantDTO enfant)
+        /// <param name="educateur">Le DTO de l'educateur.</param>
+        public void SupprimerEducateur(EducateurDTO educateur)
         {
             SqlCommand command = new SqlCommand(null, connexion);
 
             command.CommandText = " DELETE " +
-                                    " FROM T_Enfants " +
+                                    " FROM T_Educateurs " +
                                    " WHERE Nom = @nom" +
                                    " AND Prenom = @prenom" +
                                    " AND DateNaissance = @dateNaissance ";
@@ -309,9 +309,9 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             SqlParameter prenomParam = new SqlParameter("@prenom", SqlDbType.VarChar, 50);
             SqlParameter dateNaissanceParam = new SqlParameter("@dateNaissance", SqlDbType.Date);
 
-            nomParam.Value = enfant.Nom;
-            prenomParam.Value = enfant.Prenom;
-            dateNaissanceParam.Value = enfant.DateNaissance;
+            nomParam.Value = educateur.Nom;
+            prenomParam.Value = educateur.Prenom;
+            dateNaissanceParam.Value = educateur.DateNaissance;
 
             command.Parameters.Add(nomParam);
             command.Parameters.Add(prenomParam);
@@ -327,13 +327,13 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             {
                 if (e.Number == 547)
                 {
-                    throw new DBRelationException("Impossible de supprimer l'enfant.", e); // Présences associés.
+                    throw new DBRelationException("Impossible de supprimer l'educateur.", e); // Présences associés.
                 }
                 else throw;
             }
             catch (Exception ex)
             {
-                throw new Exception("Erreur lors de la supression d'un enfant...", ex);
+                throw new Exception("Erreur lors de la supression d'un educateur...", ex);
             }
 
             finally
@@ -343,13 +343,13 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         }
 
         /// <summary>
-        /// Méthode de service permettant de vider la liste des enfants.
+        /// Méthode de service permettant de vider la liste des educateurs.
         /// </summary>
-        public void ViderListeEnfant()
+        public void ViderListeEducateur()
         {
             SqlCommand command = new SqlCommand(null, connexion);
 
-            command.CommandText = " DELETE FROM T_Enfants";
+            command.CommandText = " DELETE FROM T_Educateurs";
             try
             {
                 OuvrirConnexion();
@@ -360,13 +360,13 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             {
                 if (e.Number == 547)
                 {
-                    throw new DBRelationException("Impossible de supprimer l'enfant.", e); // Présences associés.
+                    throw new DBRelationException("Impossible de supprimer l'educateur.", e); // Présences associés.
                 }
                 else throw;
             }
             catch (Exception ex)
             {
-                throw new Exception("Erreur lors de la supression d'une enfant...", ex);
+                throw new Exception("Erreur lors de la supression d'un educateur...", ex);
             }
 
             finally

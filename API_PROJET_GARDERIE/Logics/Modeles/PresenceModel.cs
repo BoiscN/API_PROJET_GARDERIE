@@ -38,6 +38,11 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
         /// </summary>
         public EnfantModel Enfant { get; set; }
 
+        /// <summary>
+        /// Propriété représentant l'educateur de la présence
+        /// </summary>
+        public EducateurModel Educateur { get; set; }
+
         #endregion AttributsProprietes
 
         #region Constructeurs
@@ -58,6 +63,13 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
         /// <param name="villeEnfant">La ville de l'enfant</param>
         /// <param name="provinceEnfant">La province de l'enfant</param>
         /// <param name="telephoneEnfant">Le telephone de l'enfant</param>
+        /// <param name="nomEducateur">Le nom de l'educateur</param>
+        /// <param name="prenomEducateur">Le prenom de l'educateur</param>
+        /// <param name="dateNaissanceEducateur">La date de naissance de l'educateur</param>
+        /// <param name="adresseEducateur">L'adresse de l'educateur</param>
+        /// <param name="villeEducateur">La ville de l'educateur</param>
+        /// <param name="provinceEducateur">La province de l'educateur</param>
+        /// <param name="telephoneEducateur">Le telephone de l'educateur</param>
         public PresenceModel(
             string uneDateTemps = "",
             string nomGarderie = "",
@@ -71,11 +83,19 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
             string adresseEnfant = "",
             string villeEnfant = "",
             string provinceEnfant = "",
-            string telephoneEnfant = "")
+            string telephoneEnfant = "",
+            string nomEducateur = "",
+            string prenomEducateur = "",
+            string dateNaissanceEducateur = "",
+            string adresseEducateur = "",
+            string villeEducateur = "",
+            string provinceEducateur = "",
+            string telephoneEducateur = "")
         {
             DateTemps = uneDateTemps;
             Garderie = new GarderieModel(nomGarderie, adresseGarderie, villeGarderie, provinceGarderie, telephoneGarderie);
             Enfant = new EnfantModel(nomEnfant, prenomEnfant, dateNaissanceEnfant, adresseEnfant, villeEnfant, provinceEnfant, telephoneEnfant);
+            Educateur = new EducateurModel(nomEducateur, prenomEducateur, dateNaissanceEducateur, adresseEducateur, villeEducateur, provinceEducateur, telephoneEducateur);
         }
 
         #endregion Constructeurs

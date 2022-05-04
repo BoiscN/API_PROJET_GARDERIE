@@ -63,7 +63,7 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
             List<PresenceModel> listePresence = new List<PresenceModel>();
             foreach (PresenceDTO presence in listePresenceDTO)
             {
-                listePresence.Add(new PresenceModel(presence.DateTemps, presence.Garderie.Nom, presence.Garderie.Adresse, presence.Garderie.Ville, presence.Garderie.Province, presence.Garderie.Telephone, presence.Enfant.Nom, presence.Enfant.Prenom, presence.Enfant.DateNaissance, presence.Enfant.Adresse, presence.Enfant.Ville, presence.Enfant.Province, presence.Enfant.Telephone));
+                listePresence.Add(new PresenceModel(presence.DateTemps, presence.Garderie.Nom, presence.Garderie.Adresse, presence.Garderie.Ville, presence.Garderie.Province, presence.Garderie.Telephone, presence.Enfant.Nom, presence.Enfant.Prenom, presence.Enfant.DateNaissance, presence.Enfant.Adresse, presence.Enfant.Ville, presence.Enfant.Province, presence.Enfant.Telephone, presence.Educateur.Nom, presence.Educateur.Prenom, presence.Educateur.DateNaissance, presence.Educateur.Adresse, presence.Educateur.Ville, presence.Educateur.Province, presence.Educateur.Telephone));
             }
 
             if (listePresence.Count == listePresenceDTO.Count)
@@ -83,7 +83,7 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
         public PresenceDTO ObtenirPresence(string dateTemps, string nomEnfant, string prenomEnfant, string dateNaissanceEnfant)
         {
             PresenceDTO presenceDTO = PresenceRepository.Instance.ObtenirPresence(dateTemps, nomEnfant, prenomEnfant, dateNaissanceEnfant);
-            PresenceModel presence = new PresenceModel(presenceDTO.DateTemps, presenceDTO.Garderie.Nom, presenceDTO.Garderie.Adresse, presenceDTO.Garderie.Ville, presenceDTO.Garderie.Province, presenceDTO.Garderie.Telephone, presenceDTO.Enfant.Nom, presenceDTO.Enfant.Prenom, presenceDTO.Enfant.DateNaissance, presenceDTO.Enfant.Adresse, presenceDTO.Enfant.Ville, presenceDTO.Enfant.Province, presenceDTO.Enfant.Telephone);
+            PresenceModel presence = new PresenceModel(presenceDTO.DateTemps, presenceDTO.Garderie.Nom, presenceDTO.Garderie.Adresse, presenceDTO.Garderie.Ville, presenceDTO.Garderie.Province, presenceDTO.Garderie.Telephone, presenceDTO.Enfant.Nom, presenceDTO.Enfant.Prenom, presenceDTO.Enfant.DateNaissance, presenceDTO.Enfant.Adresse, presenceDTO.Enfant.Ville, presenceDTO.Enfant.Province, presenceDTO.Enfant.Telephone, presenceDTO.Educateur.Nom, presenceDTO.Educateur.Prenom, presenceDTO.Educateur.DateNaissance, presenceDTO.Educateur.Adresse, presenceDTO.Educateur.Ville, presenceDTO.Educateur.Province, presenceDTO.Educateur.Telephone);
             return new PresenceDTO(presence);
         }
 
@@ -105,7 +105,7 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
 
             if (OK)
             {
-                PresenceModel unePresence = new PresenceModel(presenceDTO.DateTemps, presenceDTO.Garderie.Nom, presenceDTO.Garderie.Adresse, presenceDTO.Garderie.Ville, presenceDTO.Garderie.Province, presenceDTO.Garderie.Telephone, presenceDTO.Enfant.Nom, presenceDTO.Enfant.Prenom, presenceDTO.Enfant.DateNaissance, presenceDTO.Enfant.Adresse, presenceDTO.Enfant.Ville, presenceDTO.Enfant.Province, presenceDTO.Enfant.Telephone);
+                PresenceModel unePresence = new PresenceModel(presenceDTO.DateTemps, presenceDTO.Garderie.Nom, presenceDTO.Garderie.Adresse, presenceDTO.Garderie.Ville, presenceDTO.Garderie.Province, presenceDTO.Garderie.Telephone, presenceDTO.Enfant.Nom, presenceDTO.Enfant.Prenom, presenceDTO.Enfant.DateNaissance, presenceDTO.Enfant.Adresse, presenceDTO.Enfant.Ville, presenceDTO.Enfant.Province, presenceDTO.Enfant.Telephone, presenceDTO.Educateur.Nom, presenceDTO.Educateur.Prenom, presenceDTO.Educateur.DateNaissance, presenceDTO.Educateur.Adresse, presenceDTO.Educateur.Ville, presenceDTO.Educateur.Province, presenceDTO.Educateur.Telephone);
                 PresenceRepository.Instance.AjouterPresence(presenceDTO);
             }
             else
