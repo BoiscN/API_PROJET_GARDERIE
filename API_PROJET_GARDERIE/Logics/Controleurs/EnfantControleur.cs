@@ -111,6 +111,43 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
 
         }
 
+        /// <summary>
+        /// Méthode de service permettant de modifier l'enfant.
+        /// </summary>
+        /// <param name="enfantDTO">Le DTO de l'enfant.</param>
+        public void ModifierEnfant(EnfantDTO enfantDTO)
+        {
+            EnfantDTO enfantDTOBD = ObtenirEnfant(enfantDTO.Nom, enfantDTO.Prenom, enfantDTO.DateNaissance);
+            EnfantModel enfantBD = new EnfantModel(enfantDTOBD.Nom, enfantDTOBD.Prenom, enfantDTOBD.DateNaissance, enfantDTOBD.Adresse, enfantDTOBD.Ville, enfantDTOBD.Province, enfantDTOBD.Telephone);
+
+            if (enfantDTO.Adresse != enfantBD.Adresse || enfantDTO.Ville != enfantBD.Ville || enfantDTO.Province != enfantBD.Province || enfantDTO.Telephone != enfantBD.Telephone)
+                EnfantRepository.Instance.ModifierEnfant(enfantDTO);
+            else
+                throw new Exception("Erreur - Veuillez modifier au moins une valeur.");
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de supprimer l'enfant.
+        /// </summary>
+        /// <param name="nomEnfant">Le nom de l'enfant.</param>
+        /// <param name="prenomEnfant">Le prenom de l'enfant.</param>
+        /// <param name="dateNaissanceEnfant">La date de naissance de l'enfant.</param>
+        public void SupprimerEnfant(string nomEnfant, string prenomEnfant, string dateNaissanceEnfant)
+        {
+            EnfantDTO enfantDTOBD = ObtenirEnfant(nomEnfant, prenomEnfant, dateNaissanceEnfant);
+            EnfantRepository.Instance.SupprimerEnfant(enfantDTOBD);
+        }
+
+        /// <summary>
+        /// Méthode de service permettant de vider la liste des enfants.
+        /// </summary>
+        public void ViderListeEnfant()
+        {
+            if (ObtenirListeEnfant().Count == 0)
+                throw new Exception("Erreur - La liste des enfants est déjà vide.");
+            EnfantRepository.Instance.ViderListeEnfant();
+        }
+
         #endregion MethodesServices
     }
 }

@@ -67,5 +67,57 @@ namespace API_PROJET_GARDERIE.Controllers
             {
             }
         }
+
+        /// <summary>
+        /// Permet de modifier un enfant existant
+        /// </summary>
+        /// <param name="enfantDTO">L'enfant modifié</param>
+        [Route("Enfant/ModifierEnfant")]
+        [HttpPost]
+        public void ModifierEnfant([FromBody] EnfantDTO enfantDTO)
+        {
+            try
+            {
+                EnfantControleur.Instance.ModifierEnfant(enfantDTO);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// Permet de supprimer un enfant
+        /// </summary>
+        /// <param name="nomEnfant">Le nom de l'enfant à supprimer</param>
+        /// <param name="prenomEnfant">Le prenom de l'enfant à supprimer</param>
+        /// <param name="dateNaissanceEnfant">La date de naissance de l'enfant à supprimer</param>
+        [Route("Enfant/SupprimerEnfant")]
+        [HttpPost]
+        public void SupprimerEducateur([FromQuery] string nomEnfant, [FromQuery] string prenomEnfant, [FromQuery] string dateNaissanceEnfant)
+        {
+            try
+            {
+                EnfantControleur.Instance.SupprimerEnfant(nomEnfant, prenomEnfant, dateNaissanceEnfant);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
+        /// Supprimer toutes les enfants existant dans la base de données
+        /// </summary>
+        [Route("Enfant/ViderListeEnfant")]
+        [HttpPost]
+        public void ViderListeEnfant()
+        {
+            try
+            {
+                EnfantControleur.Instance.ViderListeEnfant();
+            }
+            catch (Exception)
+            {
+            }
+        }
     }
 }

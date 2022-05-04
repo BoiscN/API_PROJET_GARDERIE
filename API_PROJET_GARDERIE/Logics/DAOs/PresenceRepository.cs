@@ -65,6 +65,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                                                 "   FROM T_Presences tp " +
                                                 " INNER JOIN T_Garderies tg ON tp.IdGarderie = tg.IdGarderie " +
                                                 " INNER JOIN T_Enfants te ON tp.IdEnfant = te.IdEnfant " +
+                                                " INNER JOIN T_Educateurs ted ON tp.IdEducateur = ted.IdEducateur " +
                                                 " WHERE tp.IdGarderie = @idGarderie", connexion);
 
             SqlParameter idGarderieParam = new SqlParameter("@idGarderie", SqlDbType.Int);
@@ -81,7 +82,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    PresenceDTO presence = new PresenceDTO(reader.GetDateTime(1).ToString(), reader.GetString(5), reader.GetString(6), reader.GetString(7), reader.GetString(8), reader.GetString(9), reader.GetString(11), reader.GetString(12), reader.GetDateTime(13).ToString(), reader.GetString(14), reader.GetString(15), reader.GetString(16), reader.GetString(17));
+                    PresenceDTO presence = new PresenceDTO(reader.GetDateTime(1).ToString(), reader.GetString(6), reader.GetString(7), reader.GetString(8), reader.GetString(9), reader.GetString(10), reader.GetString(12), reader.GetString(13), reader.GetDateTime(14).ToString(), reader.GetString(15), reader.GetString(16), reader.GetString(17), reader.GetString(18), reader.GetString(20), reader.GetString(21), reader.GetDateTime(22).ToString(), reader.GetString(23), reader.GetString(24), reader.GetString(25), reader.GetString(26));
                     liste.Add(presence);
                 }
                 reader.Close();
@@ -143,7 +144,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
             }
             catch (Exception ex)
             {
-                throw new Exception("Erreur lors de l'obtention d'un id d'une présence par sa date, le nom, prenom et date de naissance de l'enfant...", ex);
+                throw new Exception("Erreur lors de l'obtention d'un id d'une présence par sa date, le nom, prenom et date de naissance de l'enfant et de l'educateur...", ex);
             }
             finally
             {
@@ -165,6 +166,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                                                 " FROM T_Presences tp " +
                                                 " INNER JOIN T_Garderies tg ON tp.IdGarderie = tg.IdGarderie " +
                                                 " INNER JOIN T_Enfants te ON tp.IdEnfant = te.IdEnfant " +
+                                                " INNER JOIN T_Educateurs ted ON tp.IdEducateur = ted.IdEducateur " +
                                                 " WHERE tp.DateTemps = @dateTemps " +
                                                 " AND te.Nom = @nom AND te.Prenom = @prenom " +
                                                 " AND te.DateNaissance = @dateNaissance", connexion);
@@ -193,13 +195,13 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 OuvrirConnexion();
                 SqlDataReader reader = command.ExecuteReader();
                 reader.Read();
-                unePresence = new PresenceDTO(reader.GetDateTime(1).ToString(), reader.GetString(5), reader.GetString(6), reader.GetString(7), reader.GetString(8), reader.GetString(9), reader.GetString(11), reader.GetString(12), reader.GetDateTime(13).ToString(), reader.GetString(14), reader.GetString(15), reader.GetString(16), reader.GetString(17));
+                unePresence = new PresenceDTO(reader.GetDateTime(1).ToString(), reader.GetString(6), reader.GetString(7), reader.GetString(8), reader.GetString(9), reader.GetString(10), reader.GetString(12), reader.GetString(13), reader.GetDateTime(14).ToString(), reader.GetString(15), reader.GetString(16), reader.GetString(17), reader.GetString(18), reader.GetString(20), reader.GetString(21), reader.GetDateTime(22).ToString(), reader.GetString(23), reader.GetString(24), reader.GetString(25), reader.GetString(26));
                 reader.Close();
                 return unePresence;
             }
             catch (Exception ex)
             {
-                throw new Exception("Erreur lors de l'obtention d'une présence par sa date, le nom, prénom et la date de naissance de l'enfant...", ex);
+                throw new Exception("Erreur lors de l'obtention d'une présence par sa date, le nom, prénom et la date de naissance de l'enfant et de l'educateur...", ex);
             }
             finally
             {
@@ -215,20 +217,23 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         {
             SqlCommand command = new SqlCommand(null, connexion);
 
-            command.CommandText = " INSERT INTO T_Presences (DateTemps, IdGarderie, IdEnfant) " +
-                                  " VALUES (@dateTemps, @idGarderie, @idEnfant) ";
+            command.CommandText = " INSERT INTO T_Presences (DateTemps, IdGarderie, IdEnfant, IdEducateur) " +
+                                  " VALUES (@dateTemps, @idGarderie, @idEnfant, @idEducateur) ";
 
             SqlParameter dateTempsParam = new SqlParameter("@dateTemps", SqlDbType.DateTime);
             SqlParameter idGarderieParam = new SqlParameter("@idGarderie", SqlDbType.Int);
             SqlParameter idEnfantParam = new SqlParameter("@idEnfant", SqlDbType.Int);
+            SqlParameter idEducateurParam = new SqlParameter("@idEducateur", SqlDbType.Int);
 
             dateTempsParam.Value = presenceDTO.DateTemps;
             idGarderieParam.Value = GarderieRepository.Instance.ObtenirIDGarderie(presenceDTO.Garderie.Nom);
             idEnfantParam.Value = EnfantRepository.Instance.ObtenirIDEnfant(presenceDTO.Enfant.Nom, presenceDTO.Enfant.Prenom, presenceDTO.Enfant.DateNaissance);
+            idEducateurParam.Value = EducateurRepository.Instance.ObtenirIDEducateur(presenceDTO.Educateur.Nom, presenceDTO.Educateur.Prenom, presenceDTO.Educateur.DateNaissance);
 
             command.Parameters.Add(dateTempsParam);
             command.Parameters.Add(idGarderieParam);
             command.Parameters.Add(idEnfantParam);
+            command.Parameters.Add(idEducateurParam);
 
             try
             {

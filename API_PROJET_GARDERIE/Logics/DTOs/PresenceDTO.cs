@@ -16,8 +16,20 @@ namespace API_PROJET_GARDERIE.Logics.DTOs
         /// </summary>
         public string DateTemps { get; set; }
 
+        /// <summary>
+        /// Propriété représentant la garderie de la présence
+        /// </summary>
         public GarderieDTO Garderie { get; set; }
+
+        /// <summary>
+        /// Propriété représentant l'enfant de la présence
+        /// </summary>
         public EnfantDTO Enfant { get; set; }
+
+        /// <summary>
+        /// Propriété représentant l'educateur de la présence
+        /// </summary>
+        public EducateurDTO Educateur { get; set; }
 
         #endregion Proprietes
 
@@ -49,6 +61,13 @@ namespace API_PROJET_GARDERIE.Logics.DTOs
         /// <param name="villeEnfant">La ville de l'enfant</param>
         /// <param name="provinceEnfant">La province de l'enfant</param>
         /// <param name="telephoneEnfant">Le telephone de l'enfant</param>
+        /// <param name="nomEducateur">Le nom de l'educateur</param>
+        /// <param name="prenomEducateur">Le prenom de l'educateur</param>
+        /// <param name="dateNaissanceEducateur">La date de naissance de l'educateur</param>
+        /// <param name="adresseEducateur">L'adresse de l'educateur</param>
+        /// <param name="villeEducateur">La ville de l'educateur</param>
+        /// <param name="provinceEducateur">La province de l'educateur</param>
+        /// <param name="telephoneEducateur">Le telephone de l'educateur</param>
         public PresenceDTO(
             string uneDateTemps = "",
             string nomGarderie = "",
@@ -62,11 +81,19 @@ namespace API_PROJET_GARDERIE.Logics.DTOs
             string adresseEnfant = "",
             string villeEnfant = "",
             string provinceEnfant = "",
-            string telephoneEnfant = "")
+            string telephoneEnfant = "",
+            string nomEducateur = "",
+            string prenomEducateur = "",
+            string dateNaissanceEducateur = "",
+            string adresseEducateur = "",
+            string villeEducateur = "",
+            string provinceEducateur = "",
+            string telephoneEducateur = "")
         {
             DateTemps = uneDateTemps;
             Garderie = new GarderieDTO(nomGarderie, adresseGarderie, villeGarderie, provinceGarderie, telephoneGarderie);
             Enfant = new EnfantDTO(nomEnfant, prenomEnfant, dateNaissanceEnfant, adresseEnfant, villeEnfant, provinceEnfant, telephoneEnfant);
+            Educateur = new EducateurDTO(nomEducateur, prenomEducateur, dateNaissanceEducateur, adresseEducateur, villeEducateur, provinceEducateur, telephoneEducateur);
         }
 
         /// <summary>
@@ -78,6 +105,7 @@ namespace API_PROJET_GARDERIE.Logics.DTOs
             DateTemps = unePresence.DateTemps;
             Garderie = new GarderieDTO(unePresence.Garderie);
             Enfant = new EnfantDTO(unePresence.Enfant);
+            Educateur = new EducateurDTO(unePresence.Educateur);
         }
 
         #endregion Constructeurs
