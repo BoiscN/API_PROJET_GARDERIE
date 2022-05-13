@@ -250,6 +250,101 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 FermerConnexion();
             }
         }
+        /// <summary>
+        /// Méthode de service qui permet d'obtenir la liste des presence enfonction du nom de la garderie
+        /// et la date de presence
+        /// </summary>
+        /// <param name="nomGarderie"></param>
+        /// <param name="dateTemps"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public List<PresenceDTO> ObtenirListePresenceDate(string nomGarderie, string dateTemps)
+        {
+            SqlCommand command = new SqlCommand(" SELECT * " +
+                                                "   FROM T_Presences tp " +
+                                                " INNER JOIN T_Garderies tg ON tp.IdGarderie = tg.IdGarderie " +
+                                                " INNER JOIN T_Enfants te ON tp.IdEnfant = te.IdEnfant " +
+                                                " INNER JOIN T_Educateurs ted ON tp.IdEducateur = ted.IdEducateur " +
+                                                " WHERE tp.IdGarderie = @idGarderie" +
+                                                " AND tp.DateTemps = @dateTemps", connexion);
+
+            SqlParameter idGarderieParam = new SqlParameter("@idGarderie", SqlDbType.Int);
+            SqlParameter datePresenceParam = new SqlParameter("@dateTemps", SqlDbType.Date);
+
+            idGarderieParam.Value = GarderieRepository.Instance.ObtenirIDGarderie(nomGarderie);
+            datePresenceParam.Value = dateTemps;
+
+            command.Parameters.Add(idGarderieParam);
+            command.Parameters.Add(datePresenceParam);
+
+            List<PresenceDTO> liste = new List<PresenceDTO>();
+
+            try
+            {
+                OuvrirConnexion();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    PresenceDTO presence = new PresenceDTO(reader.GetDateTime(1).ToString(), reader.GetString(6), reader.GetString(7), reader.GetString(8), reader.GetString(9), reader.GetString(10), reader.GetString(12), reader.GetString(13), reader.GetDateTime(14).ToString(), reader.GetString(15), reader.GetString(16), reader.GetString(17), reader.GetString(18), reader.GetString(20), reader.GetString(21), reader.GetDateTime(22).ToString(), reader.GetString(23), reader.GetString(24), reader.GetString(25), reader.GetString(26));
+                    liste.Add(presence);
+                }
+                reader.Close();
+                return liste;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de l'obtention de la liste des presences...", ex);
+            }
+            finally
+            {
+                FermerConnexion();
+            }
+        }
+        /// <summary>
+        /// Méthode de service qui permet d'
+        /// </summary>
+        /// <param name="nomGarderie"></param>
+        /// <param name="dateTemps"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public int ObtenirNombreEducateur(string nomGarderie, string dateTemps)
+        {
+            SqlCommand command = new SqlCommand("   SELECT Count(*) FROM" +
+                                                "   (SELECT DISTINCT(DateTemps), IdEducateur" +
+                                                "   FROM T_Presences" +
+                                                "   WHERE IdGarderie = @idGarderie" +
+                                                " AND DateTemps = @dateTemps) AS nombrePresence", connexion);
+
+
+            SqlParameter idGarderieParam = new SqlParameter("@idGarderie", SqlDbType.VarChar, 50);
+            SqlParameter datePresenceParam = new SqlParameter("@dateTemps", SqlDbType.Date);
+
+            idGarderieParam.Value = GarderieRepository.Instance.ObtenirIDGarderie(nomGarderie);
+            datePresenceParam.Value = dateTemps;
+
+
+            command.Parameters.Add(idGarderieParam);
+            command.Parameters.Add(datePresenceParam);
+            int nombrePresence;
+
+            try
+            {
+                OuvrirConnexion();
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+                nombrePresence = reader.GetInt32(0);
+                reader.Close();
+                return nombrePresence;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de l'obtention du nombre de jours et de presences des éducateurs...", ex);
+            }
+            finally
+            {
+                FermerConnexion();
+            }
+        }
 
         #endregion
     }
