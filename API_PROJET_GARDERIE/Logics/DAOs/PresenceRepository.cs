@@ -266,10 +266,10 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                                                 " INNER JOIN T_Enfants te ON tp.IdEnfant = te.IdEnfant " +
                                                 " INNER JOIN T_Educateurs ted ON tp.IdEducateur = ted.IdEducateur " +
                                                 " WHERE tp.IdGarderie = @idGarderie" +
-                                                " AND tp.DateTemps = @dateTemps", connexion);
+                                                " AND Year(tp.DateTemps) = @dateTemps", connexion);
 
             SqlParameter idGarderieParam = new SqlParameter("@idGarderie", SqlDbType.Int);
-            SqlParameter datePresenceParam = new SqlParameter("@dateTemps", SqlDbType.Date);
+            SqlParameter datePresenceParam = new SqlParameter("@dateTemps", SqlDbType.Int);
 
             idGarderieParam.Value = GarderieRepository.Instance.ObtenirIDGarderie(nomGarderie);
             datePresenceParam.Value = dateTemps;
@@ -313,11 +313,11 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                                                 "   (SELECT DISTINCT(DateTemps), IdEducateur" +
                                                 "   FROM T_Presences" +
                                                 "   WHERE IdGarderie = @idGarderie" +
-                                                " AND DateTemps = @dateTemps) AS nombrePresence", connexion);
+                                                " AND Year(DateTemps) = @dateTemps) AS nombrePresence", connexion);
 
 
             SqlParameter idGarderieParam = new SqlParameter("@idGarderie", SqlDbType.VarChar, 50);
-            SqlParameter datePresenceParam = new SqlParameter("@dateTemps", SqlDbType.Date);
+            SqlParameter datePresenceParam = new SqlParameter("@dateTemps", SqlDbType.Int);
 
             idGarderieParam.Value = GarderieRepository.Instance.ObtenirIDGarderie(nomGarderie);
             datePresenceParam.Value = dateTemps;

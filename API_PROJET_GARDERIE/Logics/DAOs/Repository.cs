@@ -25,7 +25,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         /// </summary>
         protected Repository()
         {
-            connexion = new SqlConnection("Server = localhost; Database = Garderie2; User Id=jean;Password=Savoir07$;");
+            connexion = new SqlConnection("Server = localhost; Database = Garderie; User Id=nicolas;Password=Patate123;");
         }
 
         #endregion Constructeurs

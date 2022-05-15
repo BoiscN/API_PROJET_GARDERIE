@@ -77,7 +77,9 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
             get { return adresse; }
             set
             {
-                if (value.Length <= 200)
+                if (value == null)
+                    adresse = null;
+                else if (value.Length <= 200)
                     adresse = value;
                 else
                     throw new Exception("L'adresse de l'enfant doit avoir un maximum de 200 caractères.");
@@ -96,7 +98,9 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
             get { return ville; }
             set
             {
-                if (value.Length <= 100)
+                if (value == null)
+                    ville = null;
+                else if (value.Length <= 100)
                     ville = value;
                 else
                     throw new Exception("La ville de l'enfant doit avoir un maximum de 100 caractères.");
@@ -115,7 +119,9 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
             get { return province; }
             set
             {
-                if (value.Length <= 100)
+                if (value == null)
+                    province = null;
+                else if (value.Length <= 100)
                     province = value;
                 else
                     throw new Exception("La province de l'enfant doit avoir un maximum de 100 caractères.");
@@ -134,7 +140,9 @@ namespace API_PROJET_GARDERIE.Logics.Modeles
             get { return telephone; }
             set
             {
-                if (value.Length <= 12)
+                if (value == null)
+                    telephone = null;
+                else if (value.Length <= 12)
                     telephone = value;
                 else
                     throw new Exception("Le numéro de telephone de l'enfant doit avoir un maximum de 12 caractères.");

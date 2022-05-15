@@ -167,7 +167,10 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
             listeDepenseAdmissibles = DepenseControleur.Instance.ObtenirListeDepense(nomGarderie);
             foreach (DepenseDTO depense in listeDepenseAdmissibles)
             {
-                depenseAdmissible += depense.MontantAdmissible;
+                if (Convert.ToDateTime(depense.DateTemps).Year.ToString() == dateTemps)
+                {
+                    depenseAdmissible += depense.MontantAdmissible;
+                }
             }
 
             int nombreDePresenceEducateur = PresenceRepository.Instance.ObtenirNombreEducateur(nomGarderie, dateTemps);
