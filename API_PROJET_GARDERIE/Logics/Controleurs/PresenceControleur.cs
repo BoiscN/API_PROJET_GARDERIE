@@ -112,6 +112,86 @@ namespace API_PROJET_GARDERIE.Logics.Controleurs
                 throw new Exception("Erreur - La présence est déjà existante.");
 
         }
+        /// <summary>
+        /// Méthode service qui permet d'obtenir la liste des presence en fonction
+        /// du nom de la garderie et la date de présence
+        /// </summary>
+        /// <param name="nomGarderie"></param>
+        /// <param name="dateTemps"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public List<PresenceDTO> ObtenirListePresenceDate(string nomGarderie, string dateTemps)
+        {
+            List<PresenceDTO> listePresenceDTO = PresenceRepository.Instance.ObtenirListePresenceDate(nomGarderie, dateTemps);
+            List<PresenceModel> listePresence = new List<PresenceModel>();
+            foreach (PresenceDTO presence in listePresenceDTO)
+            {
+                listePresence.Add(new PresenceModel(presence.DateTemps, presence.Garderie.Nom, presence.Garderie.Adresse, presence.Garderie.Ville, presence.Garderie.Province, presence.Garderie.Telephone, presence.Enfant.Nom, presence.Enfant.Prenom, presence.Enfant.DateNaissance, presence.Enfant.Adresse, presence.Enfant.Ville, presence.Enfant.Province, presence.Enfant.Telephone, presence.Educateur.Nom, presence.Educateur.Prenom, presence.Educateur.DateNaissance, presence.Educateur.Adresse, presence.Educateur.Ville, presence.Educateur.Province, presence.Educateur.Telephone));
+            }
+
+            if (listePresence.Count == listePresenceDTO.Count)
+                return listePresenceDTO;
+            else
+                throw new Exception("Erreur lors du chargement des présences, problème avec l'intégrité des données de la base de données.");
+        }
+
+        /// <summary>
+        /// Méthode service qui permet de calculer le revenu d'une garderie par année
+        /// </summary>
+        /// <param name="nomGarderie"></param>
+        /// <param name="dateTemps"></param>
+        /// <returns></returns>
+        public double ObtenirRevenue(string nomGarderie, string dateTemps)
+        {
+            List<PresenceDTO> listePresenceDTO = PresenceRepository.Instance.ObtenirListePresenceDate(nomGarderie, dateTemps);
+            List<PresenceModel> listePresence = new List<PresenceModel>();
+            foreach (PresenceDTO presence in listePresenceDTO)
+            {
+                listePresence.Add(new PresenceModel(presence.DateTemps, presence.Garderie.Nom, presence.Garderie.Adresse, presence.Garderie.Ville, presence.Garderie.Province, presence.Garderie.Telephone, presence.Enfant.Nom, presence.Enfant.Prenom, presence.Enfant.DateNaissance, presence.Enfant.Adresse, presence.Enfant.Ville, presence.Enfant.Province, presence.Enfant.Telephone, presence.Educateur.Nom, presence.Educateur.Prenom, presence.Educateur.DateNaissance, presence.Educateur.Adresse, presence.Educateur.Ville, presence.Educateur.Province, presence.Educateur.Telephone));
+            }
+            return (listePresenceDTO.Count * 8);
+
+        }
+
+        /// <summary>
+        /// Méthode de service qui permet d'obtenir de calculer les dépenses d'une garderie
+        /// </summary>
+        /// <param name="nomGarderie"></param>
+        /// <param name="dateTemps"></param>
+        /// <returns></returns>
+        public double CalculerDepensesGarderie(string nomGarderie, string dateTemps)
+        {
+            double depenseAdmissible = 0;
+
+            List<DepenseDTO> listeDepenseAdmissibles = new List<DepenseDTO>();
+            listeDepenseAdmissibles = DepenseControleur.Instance.ObtenirListeDepense(nomGarderie);
+            foreach (DepenseDTO depense in listeDepenseAdmissibles)
+            {
+                if (Convert.ToDateTime(depense.DateTemps).Year.ToString() == dateTemps)
+                {
+                    depenseAdmissible += depense.MontantAdmissible;
+                }
+            }
+
+            int nombreDePresenceEducateur = PresenceRepository.Instance.ObtenirNombreEducateur(nomGarderie, dateTemps);
+            double montantDepenseEducateur = (nombreDePresenceEducateur * 8) * 18;
+
+            double montantTotalDepenseGarderie = depenseAdmissible + montantDepenseEducateur;
+
+            return (montantTotalDepenseGarderie);
+        }
+        /// <summary>
+        /// Méthode de service qui permet de calculer le profit d'une garderie
+        /// </summary>
+        /// <param name="nomGarderie"></param>
+        /// <param name="dateTemps"></param>
+        /// <returns></returns>
+        public double CaluleProfit(string nomGarderie, string dateTemps)
+        {
+            double depense = CalculerDepensesGarderie(nomGarderie, dateTemps);
+            double revenu = ObtenirRevenue(nomGarderie, dateTemps);
+            return (revenu - depense);
+        }
 
         #endregion MethodesServices
     }
