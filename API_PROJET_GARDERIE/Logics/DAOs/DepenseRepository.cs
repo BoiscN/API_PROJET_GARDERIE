@@ -149,9 +149,11 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
         public DepenseDTO ObtenirDepense(string nomGarderie, string dateTemps)
         {
             SqlCommand command = new SqlCommand(" SELECT * " +
-                                                " FROM T_Depenses " +
-                                                " WHERE DateTemps = @dateTemps " +
-                                                "   AND IdGarderie = @idGarderie", connexion);
+                                                " FROM T_Depenses td " +
+                                                " INNER JOIN T_CategoriesDepense tcd ON td.IdCategorieDepense = tcd.IdCategorieDepense " +
+                                                " INNER JOIN T_Commerces tc ON td.IdCommerce = tc.IdCommerce " +
+                                                " WHERE td.DateTemps = @dateTemps " +
+                                                "   AND td.IdGarderie = @idGarderie", connexion);
 
             SqlParameter dateTempsDepenseParam = new SqlParameter("@dateTemps", SqlDbType.DateTime);
             SqlParameter idGarderieParam = new SqlParameter("@idGarderie", SqlDbType.Int);
@@ -169,7 +171,7 @@ namespace API_PROJET_GARDERIE.Logics.DAOs
                 OuvrirConnexion();
                 SqlDataReader reader = command.ExecuteReader();
                 reader.Read();
-                uneDepense = new DepenseDTO(reader.GetDateTime(1).ToString(), (double) reader.GetDecimal(2));
+                uneDepense = new DepenseDTO(reader.GetDateTime(1).ToString(), (double) reader.GetDecimal(2), reader.GetString(7), (double) reader.GetDecimal(8), reader.GetString(10));
                 reader.Close();
                 return uneDepense;
             }
